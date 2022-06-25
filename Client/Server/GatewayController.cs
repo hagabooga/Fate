@@ -26,11 +26,11 @@ public class GatewayController : EzNode
 
     private void ReceivedLoginRequest(Error result)
     {
-        Print($"GatewayController.ReceivedLoginRequest: result: {result}.");
+        Print($"GatewayController.ReceivedLoginRequest() => result: {result}.");
     }
 
     private void OnLoginButtonPressed()
     {
-        gateway.ConnectToServer("hagabooga", "asdasd");
+        gateway.ConnectToServer(loginView.Username.Text, loginView.Password.Text);
     }
 }

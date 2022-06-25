@@ -9,7 +9,8 @@ public class Authentication : EzServer<Authentication>
     readonly Accounts accounts;
     public Authentication(ServerOptions<Authentication> options,
                           Servers servers,
-                          Accounts accounts) : base(options, null, null)
+                          Accounts accounts) :
+                          base(options, null, null)
     {
         this.servers = servers;
         this.accounts = accounts;
@@ -36,14 +37,26 @@ public class Authentication : EzServer<Authentication>
         }
         else
         {
-            Print("Successful Authentication");
-            Randomize();
-            var hashed = Randi().ToString().SHA256Text();
-            var timeStamp = OS.GetUnixTime().ToString();
-            token = hashed + timeStamp;
-            Print($"Token to be sent: {token}");
-            var server = "Server 1"; // Replace with load balancers
-            servers.DistributeLoginToken(server, token, username);
+            var account = accounts[username];
+            var hashPassword = Fast.GenerateHashPassword(password, account["salt"].ToString());
+            string accountPassword = account["password"].ToString();
+            Print($"{hashPassword} == {accountPassword}");
+            if (accountPassword != hashPassword)
+            {
+                Print($"{username} entered incorrect password.");
+                result = Error.Failed;
+            }
+            else
+            {
+                Print("Successful Authentication");
+                Randomize();
+                var hashed = Randi().ToString().SHA256Text();
+                var timeStamp = OS.GetUnixTime().ToString();
+                token = hashed + timeStamp;
+                Print($"Token to be sent: {token}");
+                var server = "Server 1"; // Replace with load balancers
+                servers.DistributeLoginToken(server, token, username);
+            }
         }
         Print($"{username}: authentication results now sending to gateway server.");
         RpcId(gatewayId, "ReceiveAuthenticationResults", playerId, result, token);
