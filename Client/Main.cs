@@ -1,17 +1,22 @@
 using Godot;
 using SimpleInjector;
 using Utility;
+using static Godot.GD;
+using System.Reflection;
+using System.Linq;
 
 public class Main : EzPrefab
 {
-    public readonly LoginView LoginView;
+    public readonly MainMenu.View MainMenuView;
 
     public override void _Ready()
     {
         base._Ready();
 
         var main = new SimpleInjector.Container();
-        main.RegisterInstance(LoginView);
+        main.RegisterInstance(MainMenuView);
+        main.RegisterInstance(MainMenuView.LoginView);
+        main.RegisterInstance(MainMenuView.CreateAccountView);
 
         X509Certificate certificate = new X509Certificate();
         certificate.Load("res://Certificate/X509Certificate.crt");
@@ -19,17 +24,27 @@ public class Main : EzPrefab
 
         main.RegisterInstance<ClientOptions<Gateway>>(new ClientOptions<Gateway>("localhost", 1969));
 
+        main.RegisterSingleton<Login.Model>();
+        main.RegisterSingleton<CreateAccount.Model>();
 
+
+        var typesToAddAsChild = new[] {
+            typeof(Gateway),
+            typeof(Login.Presenter),
+            typeof(CreateAccount.Presenter),
+            typeof(MainMenu.Presenter),
+        };
 
         main.RegisterSingleton<Gateway>();
-        main.RegisterSingleton<GatewayController>();
-
+        main.RegisterSingleton<Login.Presenter>();
+        main.RegisterSingleton<CreateAccount.Presenter>();
+        main.RegisterSingleton<MainMenu.Presenter>();
 
         main.Verify();
 
-        AddChild(main.GetInstance<Gateway>());
-        AddChild(main.GetInstance<GatewayController>());
-
-        // var gatewayController = main.GetInstance<GatewayController>();
+        typesToAddAsChild.ForEach(x =>
+        {
+            AddChild((Node)main.GetInstance(x));
+        });
     }
 }

@@ -33,16 +33,19 @@ public class Gateway : EzClient<Gateway>
         RequestLoginRequest();
     }
 
-    [Remote]
-    void ReceiveLoginRequest(Error result, string token)
-    {
-        EmitSignal(nameof(ReceivedLoginRequest), result);
-    }
-
     private void RequestLoginRequest()
     {
         RpcId(1, "ReceiveLoginRequest", username, password.SHA256Text());
         username = "";
         password = "";
     }
+
+
+    [Remote]
+    void ReceiveLoginRequest(Error result, string token)
+    {
+        EmitSignal(nameof(ReceivedLoginRequest), result);
+    }
+
+
 }
