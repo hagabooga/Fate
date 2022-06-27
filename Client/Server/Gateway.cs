@@ -11,8 +11,8 @@ public class Gateway : EzClient<Gateway>
 
     public Gateway(ClientOptions<Gateway> options,
                    X509Certificate certificate) : base(options,
-                                                              false,
-                                                              certificate)
+                                                       false,
+                                                       certificate)
     {
     }
 

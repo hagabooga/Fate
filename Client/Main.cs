@@ -35,10 +35,16 @@ public class Main : EzPrefab
             typeof(MainMenu.Presenter),
         };
 
-        main.RegisterSingleton<Gateway>();
-        main.RegisterSingleton<Login.Presenter>();
-        main.RegisterSingleton<CreateAccount.Presenter>();
-        main.RegisterSingleton<MainMenu.Presenter>();
+
+        var registerSingletonMethod = typeof(SimpleInjector.Container)
+            .GetMethods()
+            .Where(x => x.Name == "RegisterSingleton")
+            .ToArray()[4];
+
+        typesToAddAsChild.ForEach(x =>
+        {
+            registerSingletonMethod.MakeGenericMethod(x).Invoke(main, new object[] { });
+        });
 
         main.Verify();
 

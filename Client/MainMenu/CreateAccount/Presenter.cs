@@ -7,6 +7,8 @@ namespace CreateAccount
 {
     public class Presenter : FailSuccessEventer
     {
+        public event Action goBackToLoginPressed;
+
         private readonly View view;
         private readonly Model model;
 
@@ -19,7 +21,17 @@ namespace CreateAccount
             view.Password.Connect("text_changed", this, nameof(PasswordTextChanged));
             view.ConfirmPassword.Connect("text_changed", this, nameof(ConfirmPasswordTextChanged));
             view.CreateAccount.Connect("pressed", this, nameof(CreateAccountButtonPressed));
+            view.GoBackToLogin.Connect("pressed", this, nameof(GoBackToLoginButtonPressed));
+
         }
+
+        private void GoBackToLoginButtonPressed()
+        {
+            goBackToLoginPressed?.Invoke();
+        }
+
+        public void SetVisible(bool yes) => view.Root.Visible = yes;
+
 
         private void ConfirmPasswordTextChanged(string text)
         {

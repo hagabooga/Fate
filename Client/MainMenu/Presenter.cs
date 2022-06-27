@@ -19,9 +19,21 @@ namespace MainMenu
             this.createAccountPresenter = createAccountPresenter;
             this.gateway = gateway;
 
+            loginPresenter.success += () =>
+            {
+                gateway.ConnectToServer(loginPresenter.Username, loginPresenter.Password);
+            };
+
             loginPresenter.signUpPressed += () =>
             {
-                Print("Sign up pressed.");
+                loginPresenter.SetVisible(false);
+                createAccountPresenter.SetVisible(true);
+            };
+
+            createAccountPresenter.goBackToLoginPressed += () =>
+            {
+                loginPresenter.SetVisible(true);
+                createAccountPresenter.SetVisible(false);
             };
         }
 
@@ -51,8 +63,6 @@ namespace MainMenu
         // {
         //     Print("Requesting new account.");
         //     RpcId(1, "ReceiveCreateAccountRequest", loginView.Username.Text, loginView.Password.Text.SHA256Text());
-
-
         // }
 
         // private void LoginButtonPressed()

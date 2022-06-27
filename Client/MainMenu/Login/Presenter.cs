@@ -2,14 +2,22 @@ using Godot;
 using System;
 using static Godot.GD;
 using Utility;
+using System.Collections.Generic;
+
 namespace Login
 {
     public class Presenter : FailSuccessEventer
     {
         public event Action signUpPressed;
 
+        readonly Tween tween = new Tween();
+
         private readonly Login.View view;
         private readonly Login.Model model;
+
+        public string Username => model.Username;
+        public string Password => model.Password;
+
 
         public Presenter(Login.View view, Login.Model model)
         {
@@ -20,7 +28,32 @@ namespace Login
             view.Password.Connect("text_changed", this, nameof(PasswordTextChanged));
             view.Login.Connect("pressed", this, nameof(LoginButtonPressed));
             view.SignUp.Connect("pressed", this, nameof(SignUpButtonPressed));
+
+
+            failed += msg =>
+            {
+                view.Result.Text = msg;
+                tween.RemoveAll();
+                tween.InterpolateProperty(view.Result,
+                              "self_modulate",
+                              Colors.White,
+                              Colors.Transparent,
+                              3,
+                              Tween.TransitionType.Quad);
+                tween.Start();
+            };
         }
+
+        public override void _Ready()
+        {
+            base._Ready();
+
+            AddChild(tween);
+        }
+
+        public void SetVisible(bool yes) => view.Root.Visible = yes;
+
+
 
         private void SignUpButtonPressed()
         {

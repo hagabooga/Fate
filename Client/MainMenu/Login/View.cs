@@ -9,7 +9,7 @@ namespace Login
     public class View : EzPrefab
     {
         public readonly Control Root;
-        public readonly Label Title;
+        public readonly Label Title, Result;
         public readonly LineEdit Username, Password;
         public readonly Button Login, SignUp;
         public readonly VBoxContainer Content;
