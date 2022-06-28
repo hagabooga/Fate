@@ -7,13 +7,20 @@ using System.Linq;
 
 public class Main : EzPrefab
 {
+    public static readonly MethodInfo RegisterSingletonMethod = typeof(SimpleInjector.Container)
+          .GetMethods()
+          .Where(x => x.Name == "RegisterSingleton")
+          .ToArray()[4];
+
     public readonly MainMenu.View MainMenuView;
+
+    public SimpleInjector.Container main { get; private set; }
 
     public override void _Ready()
     {
         base._Ready();
 
-        var main = new SimpleInjector.Container();
+        main = new SimpleInjector.Container();
         main.RegisterInstance(MainMenuView);
         main.RegisterInstance(MainMenuView.LoginView);
         main.RegisterInstance(MainMenuView.CreateAccountView);
@@ -36,14 +43,11 @@ public class Main : EzPrefab
         };
 
 
-        var registerSingletonMethod = typeof(SimpleInjector.Container)
-            .GetMethods()
-            .Where(x => x.Name == "RegisterSingleton")
-            .ToArray()[4];
+
 
         typesToAddAsChild.ForEach(x =>
         {
-            registerSingletonMethod.MakeGenericMethod(x).Invoke(main, new object[] { });
+            RegisterSingletonMethod.MakeGenericMethod(x).Invoke(main, new object[] { });
         });
 
         main.Verify();
