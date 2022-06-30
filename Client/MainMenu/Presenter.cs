@@ -19,21 +19,37 @@ namespace MainMenu
             this.createAccountPresenter = createAccountPresenter;
             this.gateway = gateway;
 
-            loginPresenter.success += () =>
-            {
-                gateway.ConnectToServer(loginPresenter.Username, loginPresenter.Password);
-            };
+            SetupLogin();
+            SetupCreateAccount();
+        }
 
-            loginPresenter.signUpPressed += () =>
+        private void SetupCreateAccount()
+        {
+            createAccountPresenter.success += () =>
             {
-                loginPresenter.SetVisible(false);
-                createAccountPresenter.SetVisible(true);
+
             };
 
             createAccountPresenter.goBackToLoginPressed += () =>
             {
                 loginPresenter.SetVisible(true);
                 createAccountPresenter.SetVisible(false);
+            };
+        }
+
+        private void SetupLogin()
+        {
+            loginPresenter.success += () =>
+            {
+                gateway.RequestLoginRequest(loginPresenter.Username,
+                                            loginPresenter.Password,
+                                            loginPresenter.IpAddress);
+            };
+
+            loginPresenter.signUpPressed += () =>
+            {
+                loginPresenter.SetVisible(false);
+                createAccountPresenter.SetVisible(true);
             };
         }
 

@@ -16,10 +16,12 @@ namespace CreateAccount
             if (ConfirmPassword.IsNullOrEmpty())
             {
                 result = "Please confirm your password!";
+                ok = false;
             }
             else if (ConfirmPassword != Password)
             {
                 result = "Passwords do not match!";
+                ok = false;
             }
             return ok;
         }

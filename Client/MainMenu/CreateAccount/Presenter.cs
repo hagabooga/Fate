@@ -5,7 +5,7 @@ using Utility;
 
 namespace CreateAccount
 {
-    public class Presenter : FailSuccessEventer
+    public class Presenter : FailSuccessEventerWithTween
     {
         public event Action goBackToLoginPressed;
 
@@ -23,6 +23,7 @@ namespace CreateAccount
             view.CreateAccount.Connect("pressed", this, nameof(CreateAccountButtonPressed));
             view.GoBackToLogin.Connect("pressed", this, nameof(GoBackToLoginButtonPressed));
 
+            AddShortPopupTween(view.Result);
         }
 
         private void GoBackToLoginButtonPressed()
@@ -51,11 +52,15 @@ namespace CreateAccount
         private void CreateAccountButtonPressed()
         {
             string result;
-            if (!model.IsUsernameValid(out result))
+            if (!model.IsValidUsername(out result))
             {
                 InvokeFailed(result);
             }
-            else if (!model.IsPasswordValid(out result))
+            else if (!model.IsValidPassword(out result))
+            {
+                InvokeFailed(result);
+            }
+            else if (!model.IsConfirmPasswordValid(out result))
             {
                 InvokeFailed(result);
             }

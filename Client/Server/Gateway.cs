@@ -4,47 +4,35 @@ using Utility;
 
 public class Gateway : EzClient<Gateway>
 {
-    [Signal] public delegate void ReceivedLoginRequest();
-
-    string username, password;
-    bool isNewAccount;
+    public event Action receivedLoginRequest;
 
     public Gateway(ClientOptions<Gateway> options,
-                   X509Certificate certificate) : base(options,
-                                                       false,
-                                                       certificate)
+                   X509Certificate certificate) :
+                   base(options,
+                        false,
+                        certificate)
     {
     }
 
-    public void ConnectToServer(string username,
-                                string password,
-                                bool isNewAccount = false,
-                                string ip = "localhost")
+    public void RequestLoginRequest(string username, string password, string ip)
     {
-        CreateClient();
-        this.username = username;
-        this.password = password;
-        this.isNewAccount = isNewAccount;
+        CreateClient(ip);
+        connectedToServer += () =>
+        {
+            RpcId(1, "ReceiveLoginRequest", username, password.SHA256Text());
+        };
     }
 
-    protected override void OnConnectedToServer()
+    private void RequestCreateAccount()
     {
-        base.OnConnectedToServer();
-        RequestLoginRequest();
-    }
 
-    private void RequestLoginRequest()
-    {
-        RpcId(1, "ReceiveLoginRequest", username, password.SHA256Text());
-        username = "";
-        password = "";
     }
 
 
     [Remote]
     void ReceiveLoginRequest(Error result, string token)
     {
-        EmitSignal(nameof(ReceivedLoginRequest), result);
+        receivedLoginRequest?.Invoke();
     }
 
 

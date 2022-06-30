@@ -10,7 +10,7 @@ namespace Login
     {
         public readonly Control Root;
         public readonly Label Title, Result;
-        public readonly LineEdit Username, Password;
+        public readonly LineEdit Username, Password, IpAddress;
         public readonly Button Login, SignUp;
         public readonly VBoxContainer Content;
 
