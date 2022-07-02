@@ -12,6 +12,13 @@ namespace CreateAccount
         private readonly View view;
         private readonly Model model;
 
+
+        public string Username => model.Username;
+        public string Password => model.Password;
+        public string IpAddress => model.IpAddress;
+
+        public override Label Label => view.Result;
+
         public Presenter(View view, Model model)
         {
             this.view = view;
@@ -23,16 +30,16 @@ namespace CreateAccount
             view.CreateAccount.Connect("pressed", this, nameof(CreateAccountButtonPressed));
             view.GoBackToLogin.Connect("pressed", this, nameof(GoBackToLoginButtonPressed));
 
-            AddShortPopupTween(view.Result);
+            AddShortPopupTweenToFailed();
         }
+
+        public void SetVisible(bool yes) => view.Root.Visible = yes;
+
 
         private void GoBackToLoginButtonPressed()
         {
             goBackToLoginPressed?.Invoke();
         }
-
-        public void SetVisible(bool yes) => view.Root.Visible = yes;
-
 
         private void ConfirmPasswordTextChanged(string text)
         {

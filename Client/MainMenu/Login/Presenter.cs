@@ -17,6 +17,7 @@ namespace Login
         public string Password => model.Password;
         public string IpAddress => model.IpAddress;
 
+        public override Label Label => view.Result;
 
         public Presenter(Login.View view, Login.Model model)
         {
@@ -29,7 +30,7 @@ namespace Login
             view.Login.Connect("pressed", this, nameof(LoginButtonPressed));
             view.SignUp.Connect("pressed", this, nameof(SignUpButtonPressed));
 
-            AddShortPopupTween(view.Result);
+            AddShortPopupTweenToFailed();
         }
 
 

@@ -63,9 +63,9 @@ public class Authentication : EzServer<Authentication>
     }
 
     [Remote]
-    public void CreateAccountRequest(int playerId, string username, string password)
+    public void ReceiveCreateAccountRequest(int playerId, string username, string password)
     {
-        var gatewayId = Multiplayer.GetRpcSenderId();
+        var authenticationId = Multiplayer.GetRpcSenderId();
         var result = Error.Ok;
         if (accounts.Exists(username))
         {
@@ -78,7 +78,7 @@ public class Authentication : EzServer<Authentication>
             var hashedPassword = Fast.GenerateHashPassword(password, salt);
             accounts.Create(username, password, salt);
         }
-        RpcId(gatewayId, "CreateAccountResults", playerId, result);
+        RpcId(authenticationId, "ReceiveCreateAccountRequestResults", playerId, result);
     }
 
 }

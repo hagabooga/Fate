@@ -39,7 +39,7 @@ public class Main : EzPrefab
             typeof(Gateway),
             typeof(Login.Presenter),
             typeof(CreateAccount.Presenter),
-            typeof(MainMenu.Presenter),
+            typeof(MainMenu.Controller),
         };
 
 

@@ -13,18 +13,26 @@ public class Gateway : EzServer<Gateway>
                    Authentication authentication) : base(options, certificate, cryptoKey)
     {
         this.authentication = authentication;
-        this.authentication.Connect(nameof(Authentication.ReceivedAuthenticationResults), this, nameof(ReturnLoginRequest));
+        this.authentication.receivedAuthenticationResults += ReturnLoginRequest;
+        this.authentication.receivedCreateAccountRequestResults += ReturnCreateAccountRequest;
     }
+
 
     public override void _Ready()
     {
         base._Ready();
     }
 
-    private void ReturnLoginRequest(int playerId, Error result, string token)
+    private void ReturnCreateAccountRequest(int id, Error result)
     {
-        RpcId(playerId, "ReceiveLoginRequest", result, token);
-        network.DisconnectPeer(playerId);
+        RpcId(id, "ReceiveCreateAccountRequest", result);
+        network.DisconnectPeer(id);
+    }
+
+    private void ReturnLoginRequest(int id, Error result, string token)
+    {
+        RpcId(id, "ReceiveLoginRequest", result, token);
+        network.DisconnectPeer(id);
     }
 
     [Remote]
@@ -33,7 +41,14 @@ public class Gateway : EzServer<Gateway>
         Print("Login request received.");
         var playerId = CustomMultiplayer.GetRpcSenderId();
         authentication.RequestAuthenticatePlayer(playerId, username, password);
+    }
 
+    [Remote]
+    void ReceiveCreateAccountRequest(string username, string password)
+    {
+        Print("Create account request received.");
+        var playerId = CustomMultiplayer.GetRpcSenderId();
+        authentication.RequestCreateAccountRequest(playerId, username, password);
     }
 
 }

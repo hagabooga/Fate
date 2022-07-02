@@ -1,8 +1,9 @@
 using Godot;
 using static Godot.GD;
 using Godot.Collections;
+using Utility;
 
-public class Accounts : Node
+public class Accounts : EzNode
 {
     const string CreateStatement = @"
 create table 
