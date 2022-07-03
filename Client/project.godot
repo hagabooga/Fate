@@ -8,22 +8,6 @@
 
 config_version=4
 
-_global_script_classes=[ {
-"base": "Reference",
-"class": "WAT",
-"language": "GDScript",
-"path": "res://addons/WAT/namespace.gd"
-}, {
-"base": "Node",
-"class": "WATTest",
-"language": "GDScript",
-"path": "res://addons/WAT/test/test.gd"
-} ]
-_global_script_class_icons={
-"WAT": "",
-"WATTest": ""
-}
-
 [WAT]
 
 Test_Directory="res://"
@@ -39,7 +23,7 @@ Display=8
 [application]
 
 config/name="Client"
-run/main_scene="res://Main.tscn"
+run/main_scene="res://FateCode/Client/Scenes/Main.tscn"
 config/icon="res://icon.png"
 
 [display]
@@ -51,7 +35,7 @@ window/stretch/aspect="keep"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "res://addons/WAT/plugin.cfg" )
+enabled=PoolStringArray(  )
 
 [physics]
 
