@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Fractural.Tasks;
 
 public partial class Main : ExplicitNode
 {
@@ -52,7 +53,5 @@ public partial class Main : ExplicitNode
             AddChild(node);
             node.Name = type.Name;
         }
-
-
     }
 }
