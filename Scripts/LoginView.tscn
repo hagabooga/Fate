@@ -28,25 +28,24 @@ offset_bottom = 48.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Title" type="Label" parent="Control/VBoxContainer"]
+[node name="TitleLabel" type="Label" parent="Control/VBoxContainer"]
 layout_mode = 2
 text = "Welcome"
 horizontal_alignment = 1
 
-[node name="Username" type="LineEdit" parent="Control/VBoxContainer"]
+[node name="UsernameLineEdit" type="LineEdit" parent="Control/VBoxContainer"]
 layout_mode = 2
 placeholder_text = "Username"
 
-[node name="Password" type="LineEdit" parent="Control/VBoxContainer"]
+[node name="PasswordLineEdit" type="LineEdit" parent="Control/VBoxContainer"]
 layout_mode = 2
 placeholder_text = "Password"
 secret = true
 
-[node name="IpAddress" type="LineEdit" parent="Control/VBoxContainer"]
+[node name="IpAddressLineEdit" type="LineEdit" parent="Control/VBoxContainer"]
 layout_mode = 2
 placeholder_text = "Ip Address"
-secret = true
 
-[node name="Login" type="Button" parent="Control/VBoxContainer"]
+[node name="LoginButton" type="Button" parent="Control/VBoxContainer"]
 layout_mode = 2
 text = "Login"

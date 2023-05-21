@@ -28,7 +28,7 @@ public abstract partial class ExplicitNode : Node
     {
         var type = GetType();
         var publicProperties = type
-            .GetProperties(InstancePublic)
+            .GetProperties(InstanceNonPublic)
             .Where(IsPropertyExplicit);
 
         foreach (var property in publicProperties)

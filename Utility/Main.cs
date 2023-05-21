@@ -8,21 +8,33 @@ using System.Linq;
 using System.Reflection;
 using Fractural.Tasks;
 
+
 public partial class Main : ExplicitNode
 {
+    [Export] PackedScene loginViewPs;
+
     static MethodInfo RegisterSingleton1Type0Args { get; } = typeof(SimpleInjector.Container)
         .GetMethods()
-        .First(x => x.IsGenericMethod
+        .Single(x => x.IsGenericMethod
                     && x.Name == "RegisterSingleton"
                     && x.GetParameters().Length == 0
                     && x.GetGenericArguments().Length == 1);
 
+    static MethodInfo RegisterInstance1Type1Args { get; } = typeof(SimpleInjector.Container)
+        .GetMethods()
+        .Single(x => x.IsGenericMethod
+                     && x.Name == "RegisterInstance"
+                     && x.GetParameters().Length == 1
+                     && x.GetGenericArguments().Length == 1);
+
+
     static MethodInfo GetInstance1Type0Args { get; } = typeof(SimpleInjector.Container)
         .GetMethods()
-        .First(x => x.IsGenericMethod
+        .Single(x => x.IsGenericMethod
                     && x.Name == "GetInstance"
                     && x.GetParameters().Length == 0
                     && x.GetGenericArguments().Length == 1);
+
 
 
     readonly SimpleInjector.Container container = new();
@@ -36,7 +48,22 @@ public partial class Main : ExplicitNode
         var typesToRegisterAsNode = new[]
         {
             typeof(HotkeyInputs),
+            typeof(LoginPresenter),
         };
+        var instancesToRegisterAsInterface = new (Node, Type)[]
+        {
+            (loginViewPs.Instantiate<LoginView>(), typeof(ILoginView)),
+        };
+
+        foreach (var (node, type) in instancesToRegisterAsInterface)
+        {
+            var genericMethod = RegisterInstance1Type1Args.MakeGenericMethod(type);
+            genericMethod.Invoke(container, new object[] { node });
+            AddChild(node);
+            node.Name = type.Name;
+        }
+
+        container.RegisterSingleton<LoginModel>();
 
         foreach (var type in typesToRegisterAsNode)
         {
