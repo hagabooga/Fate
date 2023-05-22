@@ -13,16 +13,15 @@ public sealed partial class LoginPresenter : Node
     {
         this.model = model;
         this.view = view;
-        Setup();
     }
 
-    private void Setup()
+    public override void _Ready()
     {
         model.OnResultOutput += result =>
         {
-            view.Title = result;
+            view.Message = result;
             view.TitleColor = Colors.White;
-            view.FlashTitleMessage();
+            view.FlashMessage();
         };
 
         view.LoginPressed += () =>

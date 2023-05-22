@@ -49,3 +49,8 @@ placeholder_text = "Ip Address"
 [node name="LoginButton" type="Button" parent="Control/VBoxContainer"]
 layout_mode = 2
 text = "Login"
+
+[node name="MessageLabel" type="Label" parent="Control/VBoxContainer"]
+layout_mode = 2
+text = "Welcome"
+horizontal_alignment = 1

@@ -50,6 +50,7 @@ public partial class Main : ExplicitNode
             typeof(HotkeyInputs),
             typeof(LoginPresenter),
         };
+
         var instancesToRegisterAsInterface = new (Node, Type)[]
         {
             (loginViewPs.Instantiate<LoginView>(), typeof(ILoginView)),

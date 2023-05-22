@@ -4,15 +4,11 @@ using static Godot.GD;
 
 public sealed partial class LoginModel
 {
-
     public event Action<string> OnResultOutput;
-
 
     private const int MinimumPasswordLength = 7;
 
-
     string _ipAddress;
-
 
     public string Username { get; set; }
     public string Password { get; set; }

@@ -8,11 +8,12 @@ public interface ILoginView
     string Username { get; set; }
     string Password { get; set; }
     string IpAddress { get; set; }
+    string Message { get; set; }
     Color TitleColor { set; }
 
     event Action LoginPressed;
 
-    void FlashTitleMessage();
+    void FlashMessage();
 }
 
 public sealed partial class LoginView : ExplicitNode, ILoginView
@@ -45,8 +46,15 @@ public sealed partial class LoginView : ExplicitNode, ILoginView
     {
         set => TitleLabel.Modulate = value;
     }
+    public string Message
+    {
+        get => MessageLabel.Text;
+        set => MessageLabel.Text = value;
+    }
+
 
     Label TitleLabel { get; }
+    Label MessageLabel { get; }
     LineEdit UsernameLineEdit { get; }
     LineEdit PasswordLineEdit { get; }
     LineEdit IpAddressLineEdit { get; }
@@ -55,19 +63,21 @@ public sealed partial class LoginView : ExplicitNode, ILoginView
     public override void _Ready()
     {
         base._Ready();
+        MessageLabel.Modulate = Colors.Transparent;
         LoginButton.Pressed += () => LoginPressed?.Invoke();
     }
 
 
-    public void FlashTitleMessage()
+    public void FlashMessage()
     {
         messageTween?.Kill();
         messageTween = GetTree()
             .CreateTween()
             .SetEase(Tween.EaseType.InOut)
             .SetTrans(Tween.TransitionType.Quad);
+        MessageLabel.Modulate = Colors.White;
         messageTween.TweenInterval(0.5);
-        messageTween.TweenProperty(TitleLabel,
+        messageTween.TweenProperty(MessageLabel,
                                    "modulate",
                                    Colors.Transparent,
                                    1);
